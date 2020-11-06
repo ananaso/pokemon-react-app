@@ -49,12 +49,19 @@ class PokemonApp extends React.Component {
 
   handleViewAll = (event) => {
     event.preventDefault();
-    fetch('https://pokeapi.co/api/v2/pokemon?limit=20')
-      .then(response => response.json())
-      .then(pokelist => pokelist.forEach(pokemon => {
-        console.log(pokemon);
-        return this._pokeFetch(pokemon);
-      }))
+    this.setState({pokeDisplay: []}); // clear the display before concat'ing all the pokemon again
+    for(let offset = 0; offset < 1050; offset+=10) {
+      fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=10`)
+        .then(response => response.json())  // parse http response to json
+        .then(response => response.results.map(pokemon => {
+          return this._pokeFetch(pokemon.name); // get just the pokemon names
+        }))
+        .then(pokeInfo => {
+          Promise.all(pokeInfo).then(pokeArray => { // resolve every promise returned by iterating with _pokeFetch
+            return pokeArray.map(pokemon => pokemon.info) // get just the pokemon info objects
+          }).then(pokemon => this.setState({pokeDisplay: this.state.pokeDisplay.concat(pokemon), hidden: false})); // concat the batch of pokemon onto the display
+        });
+    }
   }
 
   render() {
