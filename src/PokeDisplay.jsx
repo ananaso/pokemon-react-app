@@ -1,3 +1,5 @@
+import PokeCard from './PokeCard';
+
 const PokeDisplay = ({pokeArray}) => {
   const _generatePokeCards = () => {
     return (
@@ -14,9 +16,9 @@ const PokeDisplay = ({pokeArray}) => {
   
   return (
     <div className="pokeCardList">
-      {_generatePokeCards()}
+      {pokeArray[0] ? _generatePokeCards() : <h3>Pokemon not found!</h3>}
     </div>
   );
 }
 
-export default PokeCard;
+export default PokeDisplay;
