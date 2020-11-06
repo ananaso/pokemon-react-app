@@ -1,6 +1,6 @@
 import React from 'react';
-import PokeCard from './PokeCard';
-import PokeSearch from './PokeSearch'
+import PokeSearch from './PokeSearch';
+import PokeDisplay from './PokeDisplay';
 import PokemonLogo from './International_Pokemon_logo.svg';
 
 
@@ -15,6 +15,7 @@ class PokemonApp extends React.Component {
     this.state = {
       curPokeInfo: undefined,
       pokeDisplay: [],
+      hidden: true,
     }
   }
 
@@ -41,9 +42,19 @@ class PokemonApp extends React.Component {
     let textbox = document.getElementById('pokemon-searchbox');
     let pokemonName = textbox.value;
     this._pokeFetch(pokemonName).then(result => {
-      this.setState({pokeDisplay: [result.info]})
+      this.setState({pokeDisplay: [result.info], hidden: false})
       textbox.value = '';
     });
+  }
+
+  handleViewAll = (event) => {
+    event.preventDefault();
+    fetch('https://pokeapi.co/api/v2/pokemon?limit=20')
+      .then(response => response.json())
+      .then(pokelist => pokelist.forEach(pokemon => {
+        console.log(pokemon);
+        return this._pokeFetch(pokemon);
+      }))
   }
 
   render() {
@@ -51,10 +62,9 @@ class PokemonApp extends React.Component {
       <div>
         <img src={PokemonLogo} alt={"Pokemon Logo"}/>
         <PokeSearch onSubmit={(e) => this.handlePokemonSearch(e)}/>
-        <br />
-        <button>Search</button><button>View All</button>
-        <div id="pokeDisplayContent">
-            
+        <br /><button onClick={(e) => this.handleViewAll(e)}>View All</button>
+        <div hidden={this.state.hidden}>
+          <PokeDisplay pokeArray={this.state.pokeDisplay}/>
         </div>
       </div>
     );
