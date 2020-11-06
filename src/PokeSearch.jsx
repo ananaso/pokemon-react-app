@@ -2,8 +2,8 @@ const PokeSearch = ({onSubmit}) => {
   return (
     <form onSubmit={onSubmit}>
       <input type="text" id="pokemon-searchbox"/>
+      <button type="submit">Search</button>
     </form>
-    // <PokeCard pokeInfo={this.state.curPokeInfo}/>
   );
 }
 
