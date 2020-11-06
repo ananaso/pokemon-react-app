@@ -5,7 +5,7 @@ const PokeDisplay = ({pokeArray}) => {
     return (
       pokeArray.map(pokemon => {
         return (
-          <div className="pokeCard">
+          <div key={`${pokemon.name}-viewAllCard`} className="viewAllPokeCard">
             <hr/>
             <PokeCard pokeInfo={pokemon}/>
           </div>
@@ -15,7 +15,7 @@ const PokeDisplay = ({pokeArray}) => {
   }
   
   return (
-    <div className="pokeCardList">
+    <div className="pokeCardList" id="pokeDisplay">
       {pokeArray[0] ? _generatePokeCards() : <h3>Pokemon not found!</h3>}
     </div>
   );
